@@ -2,8 +2,8 @@
 {
     public class Employee
     {
-        public Account Account { get; set; }
-        public Company Company { get; set; }
+        public int accountId { get; set; }
+        public int companyId { get; set; }
         public string name { get; set; }
         public string lastName { get; set; }
         public int documentation { get; set; }

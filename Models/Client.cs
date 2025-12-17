@@ -2,7 +2,7 @@
 {
     internal sealed class Client
     {
-        public Account account { get; set; }
+        public int accountId { get; set; }
         public string name { get; set; }
         public string lastName { get; set; }
         public int documentation {  get; set; }
