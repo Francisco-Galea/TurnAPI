@@ -13,10 +13,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Response\" />
-    <Folder Include="DTOs\Request\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
