@@ -5,5 +5,6 @@ namespace TurnApi.Repositories.Interface
     public interface IAccountRepository
     {
         void CreateAccount(AccountCreationRequest accountRequest);
+        void AccountAlreadyExist(AccountCreationRequest accountCreationRequest);
     }
 }
