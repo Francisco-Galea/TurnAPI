@@ -23,15 +23,15 @@ namespace TurnApi.Services
             }
             catch
             {
-
-            }
-            finally
-            {
-
+                throw new NotImplementedException();
             }
         }
 
-
+        public void VerifyAccountAlreadyExist(AccountCreationRequest accountRequest)
+        {
+            accountRepository.AccountAlreadyExist(accountRequest);
+            CreateAccount(accountRequest);
+        }
 
     }
 }
