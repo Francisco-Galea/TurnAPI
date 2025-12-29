@@ -22,9 +22,8 @@ namespace TurnApi.Repositories
             try
             {
                 var connection = new SqlConnection(connectionString);
-                
-                    var queryAccount = "INSERT INTO Accounts (Email, Password) VALUES (@Email, @Password)";
-                    connection.Execute(queryAccount, accountRequest);
+                var queryAccount = "INSERT INTO Accounts (Email, Password) VALUES (@Email, @Password)";
+                connection.Execute(queryAccount, accountRequest);
                 
             }
             catch
@@ -34,6 +33,20 @@ namespace TurnApi.Repositories
             finally
             {
 
+            }
+        }
+
+        public void AccountAlreadyExist(AccountCreationRequest accountRequest)
+        {
+            try
+            {
+                using var connection = new SqlConnection(connectionString);
+                var query = "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM Accounts WHERE Email = @Email)";
+                var accountFounded = connection.QueryFirst(query, new { Email = accountRequest.email });
+            }
+            catch(InvalidOperationException)
+            { 
+                throw new InvalidOperationException("El email ya se encuentra en uso!");
             }
         }
 
