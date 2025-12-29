@@ -18,7 +18,7 @@ namespace TurnApi.Controllers
         [HttpPost]
         public void CreateAccount([FromBody] AccountCreationRequest accountRequest)
         {
-            accountService.CreateAccount(accountRequest);
+            accountService.VerifyAccountAlreadyExist(accountRequest);
         }
 
 
