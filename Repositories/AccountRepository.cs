@@ -22,17 +22,24 @@ namespace TurnApi.Repositories
             try
             {
                 var connection = new SqlConnection(connectionString);
-                var queryAccount = "INSERT INTO Accounts (Email, Password) VALUES (@Email, @Password)";
-                connection.Execute(queryAccount, accountRequest);
-                
+                var queryAccount = "INSERT INTO Accounts (Document, Password, Name, LastName, PhoneNumber) " +
+                                   "VALUES (@Document, @Password, @Name, @LastName, @PhoneNumber)";
+                connection.Execute(queryAccount, new
+                {
+                    Document = accountRequest.document,
+                    Password = accountRequest.password,
+                    Name = accountRequest.name,
+                    LastName = accountRequest.lastName,
+                    PhoneNumber = accountRequest.phoneNumber,
+                });
             }
-            catch
+            catch (SqlException)
             {
-
+                throw new Exception("Ocurrio un error al crear el usuario, intente nuevamente más tarde");
             }
-            finally
+            catch(Exception) 
             {
-
+                throw new Exception("Ocurrio un error inesperado al comunicarse con la base de datos");
             }
         }
 
@@ -41,12 +48,16 @@ namespace TurnApi.Repositories
             try
             {
                 using var connection = new SqlConnection(connectionString);
-                var query = "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM Accounts WHERE Email = @Email)";
-                var accountFounded = connection.QueryFirst(query, new { Email = accountRequest.email });
+                var query = "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM Accounts WHERE Document = @Document)";
+                var accountFounded = connection.QueryFirst(query, new { Document = accountRequest.document });
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             { 
-                throw new InvalidOperationException("El email ya se encuentra en uso!");
+                throw new InvalidOperationException("Este documento ya se encuentra registrado");
+            }
+            catch (Exception)
+            {
+                throw new Exception("Ocurrio un error inesperado al comunicarse con la base de datos");
             }
         }
 
