@@ -1,6 +1,7 @@
 ﻿using TurnApi.DTOs.Request;
 using TurnApi.Repositories.Interface;
 using TurnApi.Services.Interfaces;
+using TurnApi.Utils;
 
 namespace TurnApi.Services
 {
@@ -17,14 +18,8 @@ namespace TurnApi.Services
 
         public void CreateAccount(AccountCreationRequest accountRequest)
         {
-            try
-            {
-                accountRepository.CreateAccount(accountRequest);
-            }
-            catch
-            {
-                throw new NotImplementedException();
-            }
+            accountRequest.password = PasswordUtil.HashPassword(accountRequest.password);   
+            accountRepository.CreateAccount(accountRequest);
         }
 
         public void VerifyAccountAlreadyExist(AccountCreationRequest accountRequest)
