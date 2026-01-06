@@ -8,6 +8,7 @@ namespace TurnApi.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+
         private readonly IAccountService accountService;
 
         public AccountController(IAccountService accountService)
