@@ -19,7 +19,7 @@ namespace TurnApi.Controllers
         [HttpPost]
         public void CreateCompany([FromBody] CreateCompanyRequest createCompanyRequest)
         {
-            companyService.CreateCompany(createCompanyRequest);
+            companyService.VerifyCompanyAlreadyExist(createCompanyRequest);
         }
 
     }
