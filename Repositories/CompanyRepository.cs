@@ -21,7 +21,7 @@ namespace TurnApi.Repositories
         {
             try
             {
-                var connection = new SqlConnection(connectionString);
+                using var connection = new SqlConnection(connectionString);
                 var query = "INSERT INTO Companies CompanyName, AccountFounderId, Cuit, SocialName VALUES" +
                             "(@CompanyName, @AccountFounderId, @Cuit, @SocialName)";
                 connection.Execute(query, new
@@ -35,6 +35,25 @@ namespace TurnApi.Repositories
             catch(Exception) 
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        public void VerifyCompanyAlreadyExist(string socialReason)
+        {
+            try
+            {
+                using var connection = new SqlConnection(connectionString);
+                var query = "SELECT 1 WHERE NOT EXISTS " +
+                            "(SELECT 1 FROM Companies WHERE SocialName = @SocialName)";
+                connection.QueryFirst(query, new {SocialName = socialReason });
+            }
+            catch(InvalidOperationException) 
+            {
+                throw new InvalidOperationException("Esta empresa ya se encuentra registrada");
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al conectarse a la base de datos");
             }
         }
 
