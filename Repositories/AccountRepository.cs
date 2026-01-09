@@ -21,7 +21,7 @@ namespace TurnApi.Repositories
         {
             try
             {
-                var connection = new SqlConnection(connectionString);
+                using var connection = new SqlConnection(connectionString);
                 var queryAccount = "INSERT INTO Accounts (Document, Password, Name, LastName, PhoneNumber) " +
                                    "VALUES (@Document, @Password, @Name, @LastName, @PhoneNumber)";
                 connection.Execute(queryAccount, new
@@ -43,13 +43,13 @@ namespace TurnApi.Repositories
             }
         }
 
-        public void AccountAlreadyExist(AccountCreationRequest accountRequest)
+        public void AccountAlreadyExist(string document)
         {
             try
             {
                 using var connection = new SqlConnection(connectionString);
                 var query = "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM Accounts WHERE Document = @Document)";
-                var accountFounded = connection.QueryFirst(query, new { Document = accountRequest.document });
+                connection.QueryFirst(query, new { Document = document });
             }
             catch (InvalidOperationException)
             { 
