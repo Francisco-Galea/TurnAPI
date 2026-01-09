@@ -24,7 +24,7 @@ namespace TurnApi.Services
 
         public void VerifyAccountAlreadyExist(AccountCreationRequest accountRequest)
         {
-            accountRepository.AccountAlreadyExist(accountRequest);
+            accountRepository.AccountAlreadyExist(accountRequest.document);
             CreateAccount(accountRequest);
         }
 
