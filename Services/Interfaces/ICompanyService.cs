@@ -5,5 +5,6 @@ namespace TurnApi.Services.Interfaces
     public interface ICompanyService
     {
         void CreateCompany(CreateCompanyRequest createCompanyRequest);
+        void VerifyCompanyAlreadyExist(CreateCompanyRequest createCompanyRequest)
     }
 }

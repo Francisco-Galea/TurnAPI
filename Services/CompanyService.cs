@@ -27,5 +27,11 @@ namespace TurnApi.Services
             companyRepository.CreateCompanyRequest(createCompanyRequest);
         }
 
+        public void VerifyCompanyAlreadyExist(CreateCompanyRequest createCompanyRequest)
+        {
+            companyRepository.VerifyCompanyAlreadyExist(createCompanyRequest.socialReason);
+            CreateCompany(createCompanyRequest);
+        }
+
     }
 }
