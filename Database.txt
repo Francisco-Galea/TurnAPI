@@ -14,3 +14,9 @@ CREATE TABLE Companies (
 	Cuit NVARCHAR(40) NOT NULL,
 	FounderAccountId INT NOT NULL FOREIGN KEY (FounderAccountId) REFERENCES Accounts(AccountId)
 );
+
+CREATE TABLE Employees 
+(
+	AccountId INT NOT NULL FOREIGN KEY (AccountId) REFERENCES Accounts (AccountId),
+	CompanyId INT NOT NULL FOREIGN KEY (CompanyId) REFERENCES Companies (CompanyId)
+);
