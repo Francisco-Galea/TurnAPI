@@ -43,7 +43,7 @@ namespace TurnApi.Repositories
             }
         }
 
-        public void AccountAlreadyExist(string document)
+        public void AccountAlreadyExist(int document)
         {
             try
             {
