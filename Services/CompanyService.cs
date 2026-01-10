@@ -27,6 +27,21 @@ namespace TurnApi.Services
             companyRepository.CreateCompanyRequest(createCompanyRequest);
         }
 
+        public void FireEmployee(int companyId, int accountId)
+        {
+            companyRepository.FireEmployee(companyId, accountId);
+        }
+
+        public List<Account> GetAllEmployees(int companyId)
+        {
+            return companyRepository.GetAllEmployees(companyId);
+        }
+
+        public void HireEmployee(int companyId, int accountId)
+        {
+            companyRepository.HireEmployee(companyId, accountId);
+        }
+
         public void VerifyCompanyAlreadyExist(CreateCompanyRequest createCompanyRequest)
         {
             companyRepository.VerifyCompanyAlreadyExist(createCompanyRequest.socialReason);
