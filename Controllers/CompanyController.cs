@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TurnApi.DTOs.Request;
+using TurnApi.Models;
 using TurnApi.Services.Interfaces;
 
 namespace TurnApi.Controllers
@@ -16,10 +17,28 @@ namespace TurnApi.Controllers
             this.companyService = companyService;
         }
 
-        [HttpPost]
+        [HttpPost("/CreateCompany")]
         public void CreateCompany([FromBody] CreateCompanyRequest createCompanyRequest)
         {
             companyService.VerifyCompanyAlreadyExist(createCompanyRequest);
+        }
+
+        [HttpPost("/FireEmployee")]
+        public void FireEmployee(int companyId, int accountId)
+        {
+            companyService.FireEmployee(companyId, accountId);
+        }
+
+        [HttpPost("/HireEmployee")]
+        public void HireEmployee(int companyId, int accountId)
+        {
+            companyService.HireEmployee(companyId, accountId);
+        }
+
+        [HttpGet]
+        public List<Account> GetAllEmployees(int companyId)
+        {
+            return companyService.GetAllEmployees(companyId);    
         }
 
     }
