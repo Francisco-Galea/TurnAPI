@@ -1,4 +1,5 @@
 ﻿using TurnApi.DTOs.Request;
+using TurnApi.DTOs.Response;
 using TurnApi.Models;
 
 namespace TurnApi.Services.Interfaces
@@ -9,6 +10,6 @@ namespace TurnApi.Services.Interfaces
         void VerifyCompanyAlreadyExist(CreateCompanyRequest createCompanyRequest);
         void HireEmployee(int companyId, int accountId);
         void FireEmployee(int companyId, int accountId);
-        List<Account> GetAllEmployees(int companyId);
+        List<EmployeeResponse> GetAllEmployees(int companyId);
     }
 }
