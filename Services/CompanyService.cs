@@ -1,4 +1,5 @@
 ﻿using TurnApi.DTOs.Request;
+using TurnApi.DTOs.Response;
 using TurnApi.Models;
 using TurnApi.Repositories.Interface;
 using TurnApi.Services.Interfaces;
@@ -32,9 +33,9 @@ namespace TurnApi.Services
             companyRepository.FireEmployee(companyId, accountId);
         }
 
-        public List<Account> GetAllEmployees(int companyId)
+        public List<EmployeeResponse> GetAllEmployees(int companyId)
         {
-            return companyRepository.GetAllEmployees(companyId);
+            return companyRepository.GetAllHiredEmployees(companyId);
         }
 
         public void HireEmployee(int companyId, int accountId)
