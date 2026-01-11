@@ -18,5 +18,15 @@ CREATE TABLE Companies (
 CREATE TABLE Employees 
 (
 	AccountId INT NOT NULL FOREIGN KEY (AccountId) REFERENCES Accounts (AccountId),
-	CompanyId INT NOT NULL FOREIGN KEY (CompanyId) REFERENCES Companies (CompanyId)
+	CompanyId INT NOT NULL FOREIGN KEY (CompanyId) REFERENCES Companies (CompanyId),
+	IsActive BIT NOT NULL DEFAULT 1
+);
+
+CREATE TABLE Agendas 
+(
+	AgendaId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	CompanyId INT NOT NULL FOREIGN KEY (CompanyId) REFERENCES Companies (CompanyId),
+	Name NVARCHAR(30) NOT NULL,
+	Description NVARCHAR(80),
+	TurnDurationInMinutes INT NOT NULL
 );
