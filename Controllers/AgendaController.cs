@@ -1,0 +1,26 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using TurnApi.DTOs.Request;
+using TurnApi.Services.Interfaces;
+
+namespace TurnApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AgendaController : ControllerBase
+    {
+
+        private IAgendaService agendaService;
+
+        public AgendaController(IAgendaService agendaService)
+        {
+            this.agendaService = agendaService;
+        }
+
+        [HttpPost]
+        public void CreateAgenda([FromBody] CreateAgendaRequest createAgendaRequest)
+        {
+            agendaService.CreateAgenda(createAgendaRequest);
+        }
+
+    }
+}
