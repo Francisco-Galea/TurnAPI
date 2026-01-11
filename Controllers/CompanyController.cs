@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TurnApi.DTOs.Request;
+using TurnApi.DTOs.Response;
 using TurnApi.Models;
 using TurnApi.Services.Interfaces;
 
@@ -36,7 +37,7 @@ namespace TurnApi.Controllers
         }
 
         [HttpGet]
-        public List<Account> GetAllEmployees(int companyId)
+        public List<EmployeeResponse> GetAllEmployees(int companyId)
         {
             return companyService.GetAllEmployees(companyId);    
         }
