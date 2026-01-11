@@ -24,7 +24,7 @@ namespace TurnApi.Repositories
                 using var connection = new SqlConnection(connectionString);
                 var queryAccount = "INSERT INTO Accounts (Document, Password, Name, LastName, PhoneNumber) " +
                                    "VALUES (@Document, @Password, @Name, @LastName, @PhoneNumber)";
-                connection.Execute(queryAccount, new
+                connection.Query(queryAccount, new
                 {
                     Document = accountRequest.document,
                     Password = accountRequest.password,
