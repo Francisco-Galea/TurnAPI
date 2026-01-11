@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using TurnApi.DTOs.Request;
-using TurnApi.Models;
+using TurnApi.DTOs.Response;
 using TurnApi.Repositories.Interface;
 
 namespace TurnApi.Repositories
@@ -25,7 +25,7 @@ namespace TurnApi.Repositories
                 using var connection = new SqlConnection(connectionString);
                 var query = "INSERT INTO Companies (CompanyName, FounderAccountId, Cuit, SocialName) VALUES" +
                             "(@CompanyName, @FounderAccountId, @Cuit, @SocialName)";
-                connection.Execute(query, new
+                connection.Query(query, new
                 {
                     CompanyName = createCompanyRequest.companyName,
                     FounderAccountId = createCompanyRequest.founderAccountId,
@@ -65,7 +65,7 @@ namespace TurnApi.Repositories
                 using var connection = new SqlConnection(connectionString);
                 var query = "INSERT INTO Employees (AccountId, CompanyId)" +
                             "VALUES (@AccountId, @CompanyId)";
-                connection.Execute(query, new
+                connection.Query(query, new
                 {
                     AccountId = accountId,
                     CompanyId = companyId,
@@ -79,22 +79,27 @@ namespace TurnApi.Repositories
 
         public void FireEmployee(int companyId, int accountId)
         {
-            throw new NotImplementedException();
+            using var connection = new SqlConnection(connectionString);
+            var query = "UPDATE Employees SET IsActive = 0 " +
+                        "WHERE CompanyId = @CompanyId AND AccountId = @AccountId";
+            connection.Query(query, new { CompanyId = companyId, AccountId = accountId });
         }
 
-        public List<Account> GetAllEmployees(int companyId)
+        public List<EmployeeResponse> GetAllHiredEmployees(int companyId)
         {
             try
             {
                 using var connection = new SqlConnection(connectionString);
                 var query = "SELECT Name, LastName, PhoneNumber FROM Accounts " +
-                            "INNER JOIN Employees ON Accounts.AccountId = Employees.AccountId"; 
-                return connection.Query<Account>(query, new {CompanyId = companyId}).ToList();
+                            "INNER JOIN Employees ON Accounts.AccountId = Employees.AccountId " +
+                            "WHERE Employees.IsActive = 1"; 
+                return connection.Query<EmployeeResponse>(query, new {CompanyId = companyId}).ToList();
             }
             catch
             {
                 throw new NotImplementedException();
             }
         }
+
     }
 }
