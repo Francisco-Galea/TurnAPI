@@ -17,6 +17,9 @@ CREATE TABLE Companies (
 
 CREATE TABLE Employees 
 (
+	EmployeeId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	PositionInCompany NVARCHAR(40) NOT NULL,
+	DescriptionOfPosition NVARCHAR(MAX),
 	AccountId INT NOT NULL FOREIGN KEY (AccountId) REFERENCES Accounts (AccountId),
 	CompanyId INT NOT NULL FOREIGN KEY (CompanyId) REFERENCES Companies (CompanyId),
 	IsActive BIT NOT NULL DEFAULT 1
@@ -29,4 +32,13 @@ CREATE TABLE Agendas
 	Name NVARCHAR(30) NOT NULL,
 	Description NVARCHAR(80),
 	TurnDurationInMinutes INT NOT NULL
+);
+
+CREATE TABLE AgendaSchedules 
+(
+	AgendaScheduleId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	AgendaId INT NOT NULL FOREIGN KEY (AgendaId) REFERENCES Agendas (AgendaId),
+	WorkableDay NVARCHAR(9),
+	TurnInit TIME(2) NOT NULL,
+	TurnEnd Time(2) NOT NULL
 );
