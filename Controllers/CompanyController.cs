@@ -31,9 +31,9 @@ namespace TurnApi.Controllers
         }
 
         [HttpPost("/HireEmployee")]
-        public void HireEmployee(int companyId, int accountId)
+        public void HireEmployee([FromBody] HireOrFireEmployeeRequest hireOrFireEmployeeRequest)
         {
-            companyService.HireEmployee(companyId, accountId);
+            companyService.HireEmployee(hireOrFireEmployeeRequest);
         }
 
         [HttpGet]
