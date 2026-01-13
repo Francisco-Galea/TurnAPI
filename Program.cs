@@ -1,3 +1,5 @@
+using Dapper;
+using TurnApi.DapperHandler;
 using TurnApi.Repositories;
 using TurnApi.Repositories.Interface;
 using TurnApi.Services;
@@ -19,7 +21,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 var connectionSql = builder.Configuration["ConnectionStrings:SQLSERVER"];
+SqlMapper.AddTypeHandler(new SqlTimeOnlyTypeHandler());
 
 var app = builder.Build();
 
