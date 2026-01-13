@@ -22,5 +22,11 @@ namespace TurnApi.Controllers
             agendaService.CreateAgenda(createAgendaRequest);
         }
 
+        [HttpPost("/CreateAgendSchedule")]
+        public void CreateAgendSchedule([FromBody] CreateAgendaScheduleRequest createAgendaScheduleRequest)
+        {
+            agendaService.CreateAgendaSchedule(createAgendaScheduleRequest);
+        }
+
     }
 }
