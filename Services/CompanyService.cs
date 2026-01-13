@@ -38,9 +38,9 @@ namespace TurnApi.Services
             return companyRepository.GetAllHiredEmployees(companyId);
         }
 
-        public void HireEmployee(int companyId, int accountId)
+        public void HireEmployee(HireOrFireEmployeeRequest hireOrFireEmployeeRequest)
         {
-            companyRepository.HireEmployee(companyId, accountId);
+            companyRepository.HireEmployee(hireOrFireEmployeeRequest);
         }
 
         public void VerifyCompanyAlreadyExist(CreateCompanyRequest createCompanyRequest)

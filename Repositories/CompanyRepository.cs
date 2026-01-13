@@ -58,17 +58,21 @@ namespace TurnApi.Repositories
             }
         }
 
-        public void HireEmployee(int companyId, int accountId)
+        public void HireEmployee(HireOrFireEmployeeRequest hireOrFireEmployeeRequest)
         {
             try
             {
                 using var connection = new SqlConnection(connectionString);
-                var query = "INSERT INTO Employees (AccountId, CompanyId)" +
-                            "VALUES (@AccountId, @CompanyId)";
+                var query = "INSERT INTO Employees " +
+                            "(PositionInCompany, DescriptionOfPosition ,AccountId, CompanyId)" +
+                            "VALUES " +
+                            "(@PositionInCompany, @DescriptionOfPosition, @AccountId, @CompanyId)";
                 connection.Query(query, new
                 {
-                    AccountId = accountId,
-                    CompanyId = companyId,
+                    PositionInCompany = hireOrFireEmployeeRequest.positionInCompany,
+                    DescriptionOfPosition = hireOrFireEmployeeRequest.descriptionOfPosition,
+                    AccountId = hireOrFireEmployeeRequest.accountId,
+                    CompanyId = hireOrFireEmployeeRequest.companyId,
                 });
             }
             catch

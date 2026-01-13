@@ -8,7 +8,7 @@ namespace TurnApi.Repositories.Interface
     {
         void CreateCompanyRequest(CreateCompanyRequest createCompanyRequest);
         void VerifyCompanyAlreadyExist(string socialReason);
-        void HireEmployee(int companyId, int accountId);
+        void HireEmployee(HireOrFireEmployeeRequest hireOrFireEmployeeRequest);
         void FireEmployee(int companyId, int accountId);
         List<EmployeeResponse> GetAllHiredEmployees(int companyId);   
     }
