@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using TurnApi.DTOs.Request;
+using TurnApi.Models;
 using TurnApi.Repositories.Interface;
 
 namespace TurnApi.Repositories
@@ -58,6 +59,29 @@ namespace TurnApi.Repositories
             catch (Exception)
             {
                 throw new Exception("Ocurrio un error inesperado al comunicarse con la base de datos");
+            }
+        }
+
+        public void CreateTurn(Turn turn)
+        {
+            try
+            {
+                using var connection = new SqlConnection(connectionString);
+                var query = "INSERT INTO Turns (AgendaId, ClientId, TurnDate, TurnInit, TurnEnd) " +
+                            "VALUES " +
+                            "(@AgendaId, @ClientId, @TurnDate, @TurnInit, @TurnEnd);";
+                connection.Query(query, new 
+                    {
+                        AgendaId = turn.agendaId, 
+                        ClientId = turn.accountClientId,
+                        TurnDate = turn.turnDate,
+                        TurnInit = turn.turnInit,
+                        TurnEnd = turn.turnEnd
+                    });
+            }
+            catch
+            {
+                throw new NotImplementedException();
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using TurnApi.DTOs.Request;
+using TurnApi.Models;
 
 namespace TurnApi.Repositories.Interface
 {
@@ -6,5 +7,6 @@ namespace TurnApi.Repositories.Interface
     {
         void CreateAccount(AccountCreationRequest accountRequest);
         void AccountAlreadyExist(int document);
+        void CreateTurn(Turn turn);
     }
 }
