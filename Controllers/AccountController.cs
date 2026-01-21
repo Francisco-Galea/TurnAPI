@@ -22,6 +22,11 @@ namespace TurnApi.Controllers
             accountService.VerifyAccountAlreadyExist(accountRequest);
         }
 
+        [HttpPost("/createTurn")]
+        public void CreateTurn([FromBody] CreateTurnRequest createTurnRequest)
+        {
+            accountService.CreateTurn(createTurnRequest);
+        }
 
     }
 }
