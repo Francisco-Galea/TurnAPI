@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using TurnApi.DTOs.Request;
+using TurnApi.DTOs.Response;
 using TurnApi.Models;
 using TurnApi.Repositories.Interface;
 
@@ -35,7 +36,7 @@ namespace TurnApi.Repositories
             }
             catch
             {
-
+                throw new NotImplementedException();
             }
         }
 
@@ -57,7 +58,50 @@ namespace TurnApi.Repositories
             }
             catch
             {
+                throw new NotImplementedException();
+            }
+        }
 
+        public AgendaResponse GetSchedule(int agendaId, string dateSearched)
+        {
+            try
+            {
+                using var connection = new SqlConnection(connectionString);
+                var query =
+                    "SELECT a.TurnDurationInMinutes, s.TurnInit, s.TurnEnd FROM AgendaSchedules s " +
+                    "INNER JOIN Agendas a ON a.AgendaId = s.AgendaId " +
+                    "WHERE s.WorkableDay = @DaySearched AND " +
+                    "a.AgendaId = @AgendaId";
+                return connection.QueryFirst<AgendaResponse>(query, new
+                {
+                    DaySearched = dateSearched,
+                    AgendaId = agendaId
+                });
+            }
+            catch
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public List<Turn> GetTurns(int agendaId, DateOnly dateSearched)
+        {
+            try
+            {
+                using var connection = new SqlConnection(connectionString);
+                var query = "SELECT TurnId, TurnInit, TurnEnd FROM Turns " +
+                            "WHERE AgendaId = @AgendaId AND " +
+                            "TurnDate = @TurnDate";
+                List<Turn> turns = connection.Query<Turn>(query, new
+                {
+                    AgendaId = agendaId,
+                    TurnDate = dateSearched
+                }).ToList();
+                return turns;
+            }
+            catch
+            {
+                throw new NotImplementedException();
             }
         }
     }
