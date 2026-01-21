@@ -1,4 +1,5 @@
 using Dapper;
+using Microsoft.OpenApi.Models;
 using TurnApi.DapperHandler;
 using TurnApi.Repositories;
 using TurnApi.Repositories.Interface;
@@ -6,6 +7,22 @@ using TurnApi.Services;
 using TurnApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.MapType<DateOnly>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "date"
+    });
+
+    c.MapType<TimeOnly>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "time"
+    });
+});
+
 
 // Add services to the container.
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -24,6 +41,8 @@ builder.Services.AddSwaggerGen();
 
 var connectionSql = builder.Configuration["ConnectionStrings:SQLSERVER"];
 SqlMapper.AddTypeHandler(new SqlTimeOnlyTypeHandler());
+SqlMapper.AddTypeHandler(new SqlDateOnlyTypeHandler());
+
 
 var app = builder.Build();
 
