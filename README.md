@@ -1,113 +1,91 @@
-📅 Agenda Management API
+# Agenda Management API
 
-This project is a multi-tenant agenda management API, designed to handle companies, agendas, employees and turn scheduling with configurable rules.
+This project is a backend API designed to manage multi-tenant agendas, companies, employees, and appointment scheduling.
+It is intended as a portfolio project, focused on clean architecture, scalability, and proper separation of concerns.
 
-The system focuses on clean architecture, clear domain modeling, and business rules centralized in the service layer.
+---
 
-🚀 Features
-Accounts
+## 🚀 Current Features
 
-Create an account
+### Accounts
+- Create an account
+- Create a turn (appointment)
 
-Create a turn
+### Companies
+- Create a company
+- Hire an employee
+- Fire an employee
 
-Companies
+### Agenda
+- Create an agenda
+- Define rules for each agenda
+- Slot generation based on agenda rules  
+  - Slots are dynamically generated from agenda configuration  
+  - No hardcoded turn times
+- Multi-agenda support per company  
+  - A company can manage multiple agendas  
+  - Employees can belong to one or more agendas
 
-Create a company
+---
 
-Hire an employee
+## ✅ Implemented Business Rules
 
-Fire an employee
+- Accounts are unique using DNI (or equivalent document)
+- Companies are unique using Social Reason (not CUIT)
+- Turns cannot overlap (no superposed appointments)
+- Turn duration is configurable per agenda
+- Centralized business logic:
+  - Controllers only expose endpoints
+  - Services contain all domain logic
+  - Repositories handle persistence only
+  - DTOs and mappers are used for data transfer
 
-Manage multiple agendas per company
+---
 
-Agenda
+## 🔄 Turn Lifecycle
 
-Create an agenda
+Each turn follows a defined lifecycle:
+- Pending
+- Confirmed
+- Cancelled
+- Completed
 
-Define agenda rules
+---
 
-Dynamically generate available time slots based on agenda configuration
+## 🧱 Architecture Overview
 
-Prevent overlapping turns
+- Controllers  
+  - HTTP endpoints only
+  - No business logic
+- Services  
+  - Core business rules and validations
+- Repositories  
+  - Database access layer
+- DTOs & Mappers  
+  - Input/output abstraction
+- Clear separation of concerns following clean architecture principles
 
-⚙️ Business Rules Implemented
+---
 
-Accounts are unique by DNI / document number
+## 🛠 Features to Implement
 
-Companies are unique by business name (not CUIT)
+- Agenda availability exceptions:
+  - Holidays
+  - Non-working days
+  - Custom blocked time ranges
+- Client restrictions:
+  - Clients cannot create turns in the past
+  - Clients cannot create turns outside working hours
+  - Clients can only see and manage their own turns
+- Employee permissions:
+  - Employees can manage all turns of their respective agendas
+- Authentication & Authorization:
+  - JWT-based sessions
+  - Role-based access (Client, Employee, Owner)
 
-Turn slots are generated dynamically (no hardcoded times)
+---
 
-Overlapping turns are not allowed
+## ⚠️ Notes
 
-Employees can belong to one or more agendas
-
-Turns follow a lifecycle:
-
-Pending
-
-Confirmed
-
-Cancelled
-
-Completed
-
-All business rules are handled in the service layer.
-Controllers are limited to HTTP concerns only.
-
-🏗️ Architecture Overview
-
-The API follows a layered architecture:
-
-Controllers
-HTTP endpoints only (no business logic)
-
-Services
-Core business logic and validations
-
-Repositories
-Data access and persistence
-
-DTOs & Mappers
-Input/output models and transformations
-
-This separation ensures maintainability, testability, and clear responsibility boundaries.
-
-🔒 Pending Features / Roadmap
-
-The following features are planned for future iterations:
-
-Prevent clients from creating turns in the past
-
-Restrict clients to view and manage only their own turns
-
-Allow employees to manage all turns within their assigned agendas
-
-Prevent turn creation outside agenda working hours
-
-JWT-based authentication with role-based authorization
-
-Agenda availability exceptions:
-
-Holidays
-
-Non-working days
-
-Custom blocked time ranges
-
-🧠 Design Goals
-
-Clear domain modeling
-
-No business rules inside controllers
-
-Flexible agenda configuration
-
-Multi-tenant support
-
-Scalable foundation for future features
-
-📌 Notes
-
-This project is intended as a portfolio project, showcasing backend architecture, domain-driven design principles, and real-world scheduling logic.
+This initial release establishes the core functionality.
+Further improvements and bug fixes will be addressed in upcoming commits.
