@@ -7,7 +7,8 @@ CREATE TABLE Accounts (
 	Name NVARCHAR(30) NOT NULL,
 	LastName NVARCHAR(30) NOT NULL,
 	PhoneNumber NVARCHAR(40),
-	Password NVARCHAR(MAX) NOT NULL
+	Password NVARCHAR(MAX) NOT NULL,
+	IsActive BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE Companies (
@@ -15,7 +16,8 @@ CREATE TABLE Companies (
 	CompanyName NVARCHAR(30) NOT NULL,
 	SocialName NVARCHAR(50) NOT NULL UNIQUE,
 	Cuit NVARCHAR(40) NOT NULL,
-	FounderAccountId INT NOT NULL FOREIGN KEY (FounderAccountId) REFERENCES Accounts(AccountId)
+	FounderAccountId INT NOT NULL FOREIGN KEY (FounderAccountId) REFERENCES Accounts(AccountId),
+    IsActive BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE Employees 
@@ -25,7 +27,7 @@ CREATE TABLE Employees
 	DescriptionOfPosition NVARCHAR(MAX),
 	AccountId INT NOT NULL FOREIGN KEY (AccountId) REFERENCES Accounts (AccountId),
 	CompanyId INT NOT NULL FOREIGN KEY (CompanyId) REFERENCES Companies (CompanyId),
-	IsActive BIT NOT NULL DEFAULT 1
+	IsHired BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE Agendas 
@@ -34,24 +36,33 @@ CREATE TABLE Agendas
 	CompanyId INT NOT NULL FOREIGN KEY (CompanyId) REFERENCES Companies (CompanyId),
 	Name NVARCHAR(30) NOT NULL,
 	Description NVARCHAR(80),
-	TurnDurationInMinutes INT NOT NULL
+	IsActive BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE AgendaSchedules 
 (
 	AgendaScheduleId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	AgendaId INT NOT NULL FOREIGN KEY (AgendaId) REFERENCES Agendas (AgendaId),
-	WorkableDay NVARCHAR(9),
-	TurnInit TIME(2) NOT NULL,
-	TurnEnd Time(2) NOT NULL
+	WorkableDay NVARCHAR(9) NOT NULL,
+	AppointmentDurationInMinutes INT NOT NULL,
+	AppointmentInit TIME(2) NOT NULL,
+	AppointmentEnd Time(2) NOT NULL,
+	IsActive BIT NOT NULL DEFAULT 1
 );
 
-CREATE TABLE Turns
+CREATE TABLE Appointments
 (
-	TurnId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	AppointmentId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	AgendaId INT NOT NULL FOREIGN KEY (AgendaId) REFERENCES Agendas (AgendaId),
 	ClientId INT NOT NULL FOREIGN KEY (ClientId) REFERENCES Accounts (AccountId),
-	TurnDate DATE NOT NULL,
-	TurnInit TIME NOT NULL,
-	TurnEnd TIME NOT NULL
+	AppointmentDate DATE NOT NULL,
+	AppointmentInit TIME NOT NULL,
+	AppointmentEnd TIME NOT NULL,
+	AppointmentState INT NOT NULL,
+	Note NVARCHAR(MAX)
+);
+
+CREATE TABLE EmployeesAgendas(
+	EmployeeId INT NOT NULL FOREIGN KEY (EmployeeId) REFERENCES Employees (EmployeeId),
+	AgendaId INT NOT NULL FOREIGN KEY (AgendaId) REFERENCES Agendas (AgendaId)
 );
