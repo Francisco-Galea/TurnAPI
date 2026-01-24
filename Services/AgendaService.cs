@@ -1,6 +1,7 @@
 ﻿using TurnApi.DTOs.Request;
 using TurnApi.DTOs.Response;
 using TurnApi.Models;
+using TurnApi.Models.Enums;
 using TurnApi.Repositories.Interface;
 using TurnApi.Services.Interfaces;
 
@@ -16,6 +17,11 @@ namespace TurnApi.Services
             this.agendaRepository = agendaRepository;
         }
 
+        public void AsignEmployeeToAgenda(int agendaId, int employeeId)
+        {
+            agendaRepository.AsignEmployeeToAgenda(agendaId, employeeId);
+        }
+
         public void CreateAgenda(CreateAgendaRequest createAgendaRequest)
         {
             agendaRepository.CreateAgenda(createAgendaRequest);
@@ -27,56 +33,85 @@ namespace TurnApi.Services
             {
                 agendaId = createAgendaScheduleRequest.agendaId,
                 workableDay = createAgendaScheduleRequest.workableDay.ToUpper(),
-                turnInit = createAgendaScheduleRequest.turnInit,
-                turnEnd = createAgendaScheduleRequest.turnEnd
+                appointmentInit = createAgendaScheduleRequest.appointmentInit,
+                appointmentEnd = createAgendaScheduleRequest.appointmentEnd,
+                appointmentDurationInMinutes = createAgendaScheduleRequest.appointmentDurationInMinutes
             };
             agendaRepository.CreateAgendaSchedule(agendaSchedule);
         }
 
-        //Este va a ser traer el cronograma
-        //ya filtrado por turnos hay ocupados y no ocupados
-        public AgendaResponse GetSchedule(int agendaId, DateOnly dateSearched)
+        public AgendaResponse CreateShifts(int agendaId, DateOnly dateSearched)
         {
-            List<AvailableTurnResponse> list = new();
+            List<AvailableAppointmentResponse> list = new();
             string dayOfWeek = dateSearched.DayOfWeek.ToString().ToUpper();
-            AgendaResponse agendaResponse = agendaRepository.GetSchedule(agendaId, dayOfWeek);
-            for (int turnDuration = agendaResponse.turnDurationInMinutes; agendaResponse.turnInit < agendaResponse.turnEnd; agendaResponse.turnInit = agendaResponse.turnInit.AddMinutes(turnDuration))
+            AgendaResponse agendaResponse = agendaRepository.GetShifts(agendaId, dayOfWeek);
+            TimeOnly appointmentInixAux = agendaResponse.appointmentInit;
+            for (int appointmentDuration = agendaResponse.appointmentDurationInMinutes; appointmentInixAux < agendaResponse.appointmentEnd; appointmentInixAux = appointmentInixAux.AddMinutes(appointmentDuration))
             {
-                AvailableTurnResponse availableTurnResponse = new()
+                AvailableAppointmentResponse availableTurnResponse = new()
                 {
-                    turnInit = agendaResponse.turnInit,
-                    turnEnd = agendaResponse.turnInit.AddMinutes(turnDuration)
+                    appointmentInit = appointmentInixAux,
+                    appointmentEnd = appointmentInixAux.AddMinutes(appointmentDuration)
                 };
                 list.Add(availableTurnResponse);
-                agendaResponse.availableTurns = list;
+                agendaResponse.availableappointment = list;
             }
             return agendaResponse;
         }
 
-        public AgendaResponse GetTurnsAvailable(int agendaId, DateOnly dateSearched, TimeOnly hourSearched)
+        public AgendaResponse GetAgenda(int agendaId, DateOnly dateSearched)
         {
-            List<Turn> turns = agendaRepository.GetTurns(agendaId, dateSearched);
-            AgendaResponse agendaSchedule = GetSchedule(agendaId, dateSearched);
-            foreach(var timeBlock in agendaSchedule.availableTurns.ToList())
+            AgendaResponse agendaSchedule = CreateShifts(agendaId, dateSearched);
+            List<Appointment> appointments = agendaRepository.GetAppointments(agendaId, dateSearched);
+            foreach (var timeBlock in agendaSchedule.availableappointment.ToList())
             {
-                foreach(var turn in turns)
+                foreach (var appointment in appointments)
                 {
-                    if (turn.turnInit == hourSearched)
+                    if (timeBlock.appointmentInit == appointment.appointmentInit)
                     {
-                        throw new Exception("Horario no disponible");
+                        timeBlock.shiftState = ShiftStateEnum.Reservado;
                     }
-                    if(timeBlock.turnInit == turn.turnInit)
+                    else
                     {
-                        agendaSchedule.availableTurns.Remove(timeBlock);
+                        timeBlock.shiftState = ShiftStateEnum.Disponible;
                     }
                 }
             }
             return agendaSchedule;
         }
 
-        public AgendaResponse IsTurnAvailable(CreateTurnRequest createTurnRequest)
+        public AgendaResponse GetAgenda(int agendaId, DateOnly dateSearched, TimeOnly hourSearched)
         {
-            return GetTurnsAvailable(createTurnRequest.agendaId, createTurnRequest.turnDate, createTurnRequest.turnInit);
+            AgendaResponse agendaSchedule = CreateShifts(agendaId, dateSearched);
+            if(hourSearched <= agendaSchedule.appointmentInit || hourSearched >= agendaSchedule.appointmentEnd)
+            {
+                throw new Exception("No se puede agendar un turno fuera del horario laboral");
+            }
+            List<Appointment> appointments = agendaRepository.GetAppointments(agendaId, dateSearched);
+            foreach (var timeBlock in agendaSchedule.availableappointment.ToList())
+            {
+                foreach(var appointment in appointments)
+                {
+                    if (appointment.appointmentInit == hourSearched)
+                    {
+                        throw new Exception("Horario no disponible");
+                    }
+                    else if(timeBlock.appointmentInit == appointment.appointmentInit)
+                    {
+                        timeBlock.shiftState = ShiftStateEnum.Reservado;
+                    }
+                    else
+                    {
+                        timeBlock.shiftState = ShiftStateEnum.Disponible;
+                    }
+                }
+            }
+            return agendaSchedule;
+        }
+
+        public AgendaResponse IsAppointmentAvailable(CreateAppointmentRequest createAppointmentRequest)
+        {
+            return GetAgenda(createAppointmentRequest.agendaId, createAppointmentRequest.appointmentDate, createAppointmentRequest.appointmentInit);
         }
 
     }
