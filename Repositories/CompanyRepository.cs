@@ -94,9 +94,9 @@ namespace TurnApi.Repositories
             try
             {
                 using var connection = new SqlConnection(connectionString);
-                var query = "SELECT Name, LastName, PhoneNumber FROM Accounts " +
+                var query = "SELECT PositionInCompany, DescriptionOfPosition, Name, LastName, PhoneNumber FROM Accounts " +
                             "INNER JOIN Employees ON Accounts.AccountId = Employees.AccountId " +
-                            "WHERE Employees.IsActive = 1"; 
+                            "WHERE Employees.IsHired = 1"; 
                 return connection.Query<EmployeeResponse>(query, new {CompanyId = companyId}).ToList();
             }
             catch
