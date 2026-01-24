@@ -4,9 +4,9 @@
     {
         //public string CompanyName { get; set; }
         //public int accountEmployeeId { get; set; }
-        public int turnDurationInMinutes { get; set; }
-        public TimeOnly turnInit { get; set; }
-        public TimeOnly turnEnd { get; set; }
-        public List<AvailableTurnResponse> availableTurns { get; set; }
+        public int appointmentDurationInMinutes { get; set; }
+        public TimeOnly appointmentInit { get; set; }
+        public TimeOnly appointmentEnd { get; set; }
+        public List<AvailableAppointmentResponse> availableappointment { get; set; }
     }
 }
