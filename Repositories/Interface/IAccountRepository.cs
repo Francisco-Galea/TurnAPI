@@ -7,6 +7,6 @@ namespace TurnApi.Repositories.Interface
     {
         void CreateAccount(AccountCreationRequest accountRequest);
         void AccountAlreadyExist(int document);
-        void CreateTurn(Turn turn);
+        void CreateAppointment(Appointment appointment);
     }
 }
