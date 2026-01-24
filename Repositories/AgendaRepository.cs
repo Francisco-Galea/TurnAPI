@@ -24,14 +24,13 @@ namespace TurnApi.Repositories
             try
             {
                 using var connection = new SqlConnection(connectionString);
-                var query = "INSERT INTO Agendas (CompanyId, Name, Description, TurnDurationInMinutes) " +
-                            "VALUES (@CompanyId, @Name, @Description, @TurnDurationInMinutes);";
+                var query = "INSERT INTO Agendas (CompanyId, Name, Description) " +
+                            "VALUES (@CompanyId, @Name, @Description);";
                 connection.Query(query, new
                 {
                     CompanyId = createAgendaRequest.companyId,
                     Name = createAgendaRequest.name,
                     Description = createAgendaRequest.description,
-                    TurnDurationInMinutes = createAgendaRequest.turnDurationInMinutes
                 });
             }
             catch
@@ -45,15 +44,16 @@ namespace TurnApi.Repositories
             try
             {
                 using var connection = new SqlConnection(connectionString);
-                var query = "INSERT INTO AgendaSchedules (AgendaId, WorkableDay, TurnInit, TurnEnd) " +
+                var query = "INSERT INTO AgendaSchedules (AgendaId, WorkableDay, AppointmentInit, AppointmentEnd, AppointmentDurationInMinutes) " +
                             "VALUES " +
-                            "(@AgendaId, @WorkableDay, @TurnInit, @TurnEnd)";
+                            "(@AgendaId, @WorkableDay, @AppointmentInit, @AppointmentEnd, @AppointmentDurationInMinutes)";
                 connection.Query(query, new
                 {
                     AgendaId = agendaSchedule.agendaId,
                     WorkableDay = agendaSchedule.workableDay,
-                    TurnInit = agendaSchedule.turnInit,
-                    TurnEnd = agendaSchedule.turnEnd,
+                    AppointmentInit = agendaSchedule.appointmentInit,
+                    AppointmentEnd = agendaSchedule.appointmentEnd,
+                    AppointmentDurationInMinutes = agendaSchedule.appointmentDurationInMinutes
                 });
             }
             catch
@@ -62,13 +62,13 @@ namespace TurnApi.Repositories
             }
         }
 
-        public AgendaResponse GetSchedule(int agendaId, string dateSearched)
+        public AgendaResponse GetShifts(int agendaId, string dateSearched)
         {
             try
             {
                 using var connection = new SqlConnection(connectionString);
                 var query =
-                    "SELECT a.TurnDurationInMinutes, s.TurnInit, s.TurnEnd FROM AgendaSchedules s " +
+                    "SELECT a.Name, s.AppointmentDurationInMinutes, s.AppointmentInit, s.AppointmentEnd FROM AgendaSchedules s " +
                     "INNER JOIN Agendas a ON a.AgendaId = s.AgendaId " +
                     "WHERE s.WorkableDay = @DaySearched AND " +
                     "a.AgendaId = @AgendaId";
@@ -84,25 +84,45 @@ namespace TurnApi.Repositories
             }
         }
 
-        public List<Turn> GetTurns(int agendaId, DateOnly dateSearched)
+        public List<Appointment> GetAppointments(int agendaId, DateOnly dateSearched)
         {
             try
             {
                 using var connection = new SqlConnection(connectionString);
-                var query = "SELECT TurnId, TurnInit, TurnEnd FROM Turns " +
+                var query = "SELECT AppointmentId, AppointmentInit, AppointmentEnd FROM Appointments " +
                             "WHERE AgendaId = @AgendaId AND " +
-                            "TurnDate = @TurnDate";
-                List<Turn> turns = connection.Query<Turn>(query, new
+                            "AppointmentDate = @AppointmentDate";
+                List<Appointment> appointments = connection.Query<Appointment>(query, new
                 {
                     AgendaId = agendaId,
-                    TurnDate = dateSearched
+                    AppointmentDate = dateSearched
                 }).ToList();
-                return turns;
+                return appointments;
             }
             catch
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public void AsignEmployeeToAgenda(int agendaId, int employeeId)
+        {
+            try
+            {
+                using var connection = new SqlConnection(connectionString);
+                var query = "INSERT INTO EmployeesAgendas (EmployeeId, AgendaId) VALUES" +
+                            "(@EmployeeId, @AgendaId);";
+                connection.Query(query, new
+                {
+                    EmployeeId = employeeId,
+                    AgendaId = agendaId
+                });
+            }
+            catch
+            {
+                throw new NotImplementedException();
+            }
+            
         }
     }
 }

@@ -6,6 +6,6 @@ namespace TurnApi.Services.Interfaces
     {
         void CreateAccount(AccountCreationRequest accountRequest);
         void VerifyAccountAlreadyExist(AccountCreationRequest accountRequest);
-        void CreateTurn(CreateTurnRequest createTurnRequest);
+        void CreateAppointment(CreateAppointmentRequest createAppointmentRequest);
     }
 }

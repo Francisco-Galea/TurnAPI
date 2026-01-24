@@ -16,16 +16,16 @@ namespace TurnApi.Controllers
             this.accountService = accountService;
         }
 
-        [HttpPost]
+        [HttpPost("/CreateAccount")]
         public void CreateAccount([FromBody] AccountCreationRequest accountRequest)
         {
             accountService.VerifyAccountAlreadyExist(accountRequest);
         }
 
-        [HttpPost("/createTurn")]
-        public void CreateTurn([FromBody] CreateTurnRequest createTurnRequest)
+        [HttpPost("/CreateAppointment")]
+        public void CreateAppointment([FromBody] CreateAppointmentRequest createAppointmentRequest)
         {
-            accountService.CreateTurn(createTurnRequest);
+            accountService.CreateAppointment(createAppointmentRequest);
         }
 
     }

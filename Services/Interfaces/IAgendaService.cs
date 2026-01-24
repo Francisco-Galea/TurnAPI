@@ -7,8 +7,9 @@ namespace TurnApi.Services.Interfaces
     {
         void CreateAgenda(CreateAgendaRequest createAgendaRequest);
         void CreateAgendaSchedule(CreateAgendaScheduleRequest createAgendaScheduleRequest);
-        AgendaResponse GetSchedule(int agendaId, DateOnly dateSearched);
-        AgendaResponse IsTurnAvailable(CreateTurnRequest createTurnRequest);
-        AgendaResponse GetTurnsAvailable(int agendaId, DateOnly dateSearched, TimeOnly hourSearched);
+        AgendaResponse CreateShifts(int agendaId, DateOnly dateSearched);
+        AgendaResponse IsAppointmentAvailable(CreateAppointmentRequest createAppointmentRequest);
+        AgendaResponse GetAgenda(int agendaId, DateOnly dateSearched);
+        void AsignEmployeeToAgenda(int agendaId, int employeeId);
     }
 }

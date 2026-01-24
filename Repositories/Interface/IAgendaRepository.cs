@@ -8,7 +8,8 @@ namespace TurnApi.Repositories.Interface
     {
         void CreateAgenda(CreateAgendaRequest createAgendaRequest);
         void CreateAgendaSchedule(AgendaSchedule agendaSchedule);
-        AgendaResponse GetSchedule(int agendaId, string dateSearched);
-        List<Turn> GetTurns(int agendaId, DateOnly dateSearched);
+        AgendaResponse GetShifts(int agendaId, string dateSearched);
+        List<Appointment> GetAppointments(int agendaId, DateOnly dateSearched);
+        void AsignEmployeeToAgenda(int agendaId, int employeeId);
     }
 }

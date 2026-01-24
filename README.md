@@ -34,6 +34,7 @@ It is intended as a portfolio project, focused on clean architecture, scalabilit
 - Companies are unique using Social Reason (not CUIT)
 - Turns cannot overlap (no superposed appointments)
 - Turn duration is configurable per agenda
+- Clients cannot create turns outside working hours
 - Centralized business logic:
   - Controllers only expose endpoints
   - Services contain all domain logic
@@ -75,7 +76,6 @@ Each turn follows a defined lifecycle:
   - Custom blocked time ranges
 - Client restrictions:
   - Clients cannot create turns in the past
-  - Clients cannot create turns outside working hours
   - Clients can only see and manage their own turns
 - Employee permissions:
   - Employees can manage all turns of their respective agendas

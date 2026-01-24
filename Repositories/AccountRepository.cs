@@ -62,22 +62,23 @@ namespace TurnApi.Repositories
             }
         }
 
-        public void CreateTurn(Turn turn)
+        public void CreateAppointment(Appointment appointment)
         {
             try
             {
                 using var connection = new SqlConnection(connectionString);
-                var query = "INSERT INTO Turns (AgendaId, ClientId, TurnDate, TurnInit, TurnEnd) " +
+                var query = "INSERT INTO Appointments (AgendaId, ClientId, AppointmentDate, AppointmentInit, AppointmentEnd, AppointmentState) " +
                             "VALUES " +
-                            "(@AgendaId, @ClientId, @TurnDate, @TurnInit, @TurnEnd);";
+                            "(@AgendaId, @ClientId, @AppointmentDate, @AppointmentInit, @AppointmentEnd, @AppointmentState);";
                 connection.Query(query, new 
                     {
-                        AgendaId = turn.agendaId, 
-                        ClientId = turn.accountClientId,
-                        TurnDate = turn.turnDate,
-                        TurnInit = turn.turnInit,
-                        TurnEnd = turn.turnEnd
-                    });
+                        AgendaId = appointment.agendaId, 
+                        ClientId = appointment.accountClientId,
+                        AppointmentDate = appointment.appointmentDate,
+                        AppointmentInit = appointment.appointmentInit,
+                        AppointmentEnd = appointment.appointmentEnd,
+                        AppointmentState = appointment.appointmentState
+                });
             }
             catch
             {

@@ -1,6 +1,7 @@
 ﻿using TurnApi.DTOs.Request;
 using TurnApi.DTOs.Response;
 using TurnApi.Models;
+using TurnApi.Models.Enums;
 using TurnApi.Repositories.Interface;
 using TurnApi.Services.Interfaces;
 using TurnApi.Utils;
@@ -32,20 +33,21 @@ namespace TurnApi.Services
             CreateAccount(accountRequest);
         }
 
-        public void CreateTurn(CreateTurnRequest createTurnRequest)
+        public void CreateAppointment(CreateAppointmentRequest createTurnRequest)
         {
-            AgendaResponse agendaResponse = agendaService.IsTurnAvailable(createTurnRequest);
+            AgendaResponse agendaResponse = agendaService.IsAppointmentAvailable(createTurnRequest);
             
-            Turn turn = new()
+            Appointment appointment = new()
             {
                 agendaId = createTurnRequest.agendaId,
                 accountClientId = createTurnRequest.accountClientId,
-                turnDate = createTurnRequest.turnDate,
-                turnInit = createTurnRequest.turnInit,
-                turnEnd = createTurnRequest.turnInit.AddMinutes(agendaResponse.turnDurationInMinutes),
+                appointmentDate = createTurnRequest.appointmentDate,
+                appointmentInit = createTurnRequest.appointmentInit,
+                appointmentEnd = createTurnRequest.appointmentInit.AddMinutes(agendaResponse.appointmentDurationInMinutes),
+                appointmentState = AppointmentStateEnum.Pendiente,
                 notes = createTurnRequest.notes,
             };
-            accountRepository.CreateTurn(turn);
+            accountRepository.CreateAppointment(appointment);
         }
 
     }

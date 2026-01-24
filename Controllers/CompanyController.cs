@@ -36,7 +36,7 @@ namespace TurnApi.Controllers
             companyService.HireEmployee(hireOrFireEmployeeRequest);
         }
 
-        [HttpGet]
+        [HttpGet("/GetAllEmployees")]
         public List<EmployeeResponse> GetAllEmployees(int companyId)
         {
             return companyService.GetAllEmployees(companyId);    
