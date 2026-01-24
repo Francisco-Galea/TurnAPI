@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Dapper;
 using Microsoft.OpenApi.Models;
 using TurnApi.DapperHandler;
@@ -23,6 +24,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+        );
+    });
 
 // Add services to the container.
 builder.Services.AddScoped<IAccountService, AccountService>();
