@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TurnApi.DTOs.Request;
 using TurnApi.DTOs.Response;
+using TurnApi.Models;
 using TurnApi.Services.Interfaces;
 
 namespace TurnApi.Controllers
@@ -17,7 +18,7 @@ namespace TurnApi.Controllers
             this.agendaService = agendaService;
         }
 
-        [HttpPost]
+        [HttpPost("/CreateAgenda")]
         public void CreateAgenda([FromBody] CreateAgendaRequest createAgendaRequest)
         {
             agendaService.CreateAgenda(createAgendaRequest);
@@ -28,13 +29,19 @@ namespace TurnApi.Controllers
         {
             agendaService.CreateAgendaSchedule(createAgendaScheduleRequest);
         }
-
-        /*
-        [HttpGet("/GetSchedule")]
-        public AgendaResponse GetAvailableTurn(int agendaId,DateOnly dateSearched)
+        
+        [HttpGet("/GetAgenda")]
+        public AgendaResponse GetAgenda(int agendaId,DateOnly dateSearched)
         {
-            return agendaService.GetTurnsAvailable(agendaId, dateSearched);
+            return agendaService.GetAgenda(agendaId, dateSearched);
         }
-        */
+
+        [HttpPost("/AsignEmployeeToAgenda")]        
+        public void AsignEmployeeToAgenda(int agendaId, int employeeId)
+        {
+            agendaService.AsignEmployeeToAgenda(agendaId, employeeId);
+        }
+        
+
     }
 }
